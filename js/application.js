@@ -1,6 +1,9 @@
 const Rounte = {
-  baseUrl: "http://127.0.0.1:5501/",
+  baseUrl: "http://127.0.0.1:8080/",
   BEUrl: "https://localhost:44376/",
+  PartialViews: {
+    HomePageCarousel : "partialViews/homepageCarousel.html",
+  },
 };
 
 let getCategories = (shopId) => {
@@ -57,6 +60,29 @@ let enableHoverNavbar = () => {
       });
   }
 }
+
+let Controller = (url, method, data) => {
+  $.ajax({
+    url: url,
+    data: data,
+    method: method,
+    success: (res) => {
+      $('#body').empty();
+      $('#body').append(res);
+    }
+  })
+}
+
+let PrepareHomePage = () => {
+  $('#body').css('padding-top',($('header').height()));
+  Controller(Rounte.baseUrl + Rounte.PartialViews.HomePageCarousel, 'GET');
+}
+
+let Search = () => {
+  $('#Search').click(
+    Controller(Rounte.BEUrl + 'Search', "GET", $('#SearchField').val())
+  );
+} 
 
 // Reskinning Guidance
 // Classes not to be removed
