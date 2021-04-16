@@ -14,33 +14,58 @@
     <script src="./js/application.js"></script>
 </head>
 <body>
-    <header>
-        <div id="SearchBar">
-            <div class="container">
-                <a class="navbar-brand" href="#">
-                    <div class="Logo">
-                        <img src="./assets/orcus-logo.jpg" alt="">
-                        <h2>Orcus</h2>
-                    </div>
-                </a>
-            </div>
+    <header class="fixed-top">
+        <div class="container d-xl-none d-block custom-nav">
+            <a class="navbar-brand Logo" href="#">
+                <img src="./assets/orcus-logo.jpg" alt="">
+                <span class="ml-3 font-weight-bold">BRAND</apan>
+            </a>
+            <button id="Hamburger" class="navbar-toggler navbar-toggler-right border-0 ripple" type="button" data-bs-toggle="collapse" data-bs-target="#navbar4" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-        <nav class="navbar navbar-expand-lg custom-nav">
+
+        <nav class="navbar navbar-expand-lg custom-nav shadow-sm d-md-block d-none">
             <div class="container">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul id="navbar-nav" class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-                </div>
-                <div class="d-flex user-tools">
-                    <a><i class="fas fa-search"></i></a>
-                    <a><i class="fas fa-shopping-cart"></i></a>
-                    <a><i class="far fa-heart"></i></a>
-                    <a><i class="fas fa-user"></i></a>
-                </div>
+                <a class="navbar-brand d-flex align-items-center Logo" href="#">
+                    <img src="./assets/orcus-logo.jpg" alt="">
+                    <span class="ml-3 font-weight-bold">BRAND</apan>
+                </a>
+
+                <ul class="navbar-nav ml-auto mt-3 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link ripple" href="#">
+                            <i class="fab fa-twitter"></i><span class="d-lg-none ml-3">Twitter</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ripple" href="#">
+                            <i class="fab fa-facebook"></i><span class="d-lg-none ml-3">Facebook</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ripple" href="#">
+                            <i class="fab fa-instagram"></i>
+                            <span class="d-lg-none ml-3">Instagram</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ripple" href="#">
+                            <i class="fab fa-linkedin"></i>
+                            <span class="d-lg-none ml-3">Linkedin</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </nav>
+
+        <div id="navbar" class="navbar navbar-expand-lg custom-nav shadow-sm d-md-block">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbar4">
+                    <ul class="navbar-nav me-auto mb-3 mb-lg-0" id="navbar-nav"></ul>
+                </div>
+            </div>
+        </div>
     </header>
     <div id="body"></div>
     <footer></footer>
