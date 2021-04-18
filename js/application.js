@@ -3,6 +3,7 @@ const Rounte = {
   BEUrl: "https://localhost:44376/",
   PartialViews: {
     HomePageCarousel : "partialViews/homepageCarousel.html",
+    Banner : "partialViews/banner.html"
   },
 };
 
@@ -61,21 +62,35 @@ let enableHoverNavbar = () => {
   }
 }
 
-let Controller = (url, method, data) => {
+let Controller = (url, method, data, emptyBody = true, callback) => {
   $.ajax({
     url: url,
     data: data,
     method: method,
     success: (res) => {
-      $('#body').empty();
+      if(emptyBody == true){
+        $('#body').empty();
+      }
       $('#body').append(res);
+      if(typoeof(callback) === 'function'){ callback(); }
+    },
+    error: (res) => {
+      console.log(res);
     }
   })
 }
 
+let PlaceBanner = (bannerHookId, bannerImgUrl, clearHook = true) => {
+  if(bannerHookId[0] != '#') { bannerHookId = '#' + bannerHookId; }
+  if(clearHook) { $(bannerHookId).empty(); }
+  $(bannerHookId).append('<div class="container"> <a href="#" class="banner"> <img src="' + bannerImgUrl + '" alt="" srcset=""> </a> </div>');
+}
+
 let PrepareHomePage = () => {
-  $('#body').css('padding-top',($('header').height()));
-  Controller(Rounte.baseUrl + Rounte.PartialViews.HomePageCarousel, 'GET');
+  $('#body').css('padding-top',$('header').height());
+  Controller(Rounte.baseUrl + Rounte.PartialViews.HomePageCarousel, 'GET', null, false, PlaceBanner("body", "./../assets/Banners/black-friday-1898114_1280.jpg", false));
+  // Controller(Rounte.baseUrl + Rounte.PartialViews.Banner, 'GET', null, false);
+  ;
 }
 
 let Search = () => {
