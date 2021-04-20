@@ -1,9 +1,12 @@
 :root {
   --default-nav-bg: #932ead;
   --default-bg: white;
+  --default-heading-style-color: #BFA170;
+  --discount-style-bg-color: #BFA170;
 
   --default-nav-text: white;
   --default-text: black;
+  --default-price-text: red;
 
   --click-effect-color: white;
   --hover-effect-color: rgba(0, 0, 0, 0.418);

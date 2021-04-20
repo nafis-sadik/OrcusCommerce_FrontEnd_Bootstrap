@@ -97,6 +97,10 @@ let PlaceBanner = (bannerHookId, bannerImgUrl,  bannerRedirectionUrl, clearHook 
   $(bannerHookId).append('<div class="container"> <a href="' + bannerRedirectionUrl + '" class="fullWidthBanner"> <img src="' + bannerImgUrl + '" alt="" srcset=""> </a> </div>');
 };
 
+let PlaceProductGrid = (bannerHookId, clearHook = true) => {
+  Controller('./../Components/ProductGrid.html', 'GET', null, clearHook, bannerHookId, null);
+}
+
 // UI Section
 
 let LoadHomePage = () => {
@@ -105,6 +109,9 @@ let LoadHomePage = () => {
   PlaceBanner("OfferBanner1", "./../assets/Banners/Computer-Accessories-v2.png", '#', false);
   PlaceBanner("OfferBanner2", "./../assets/Banners/Lifstyle-v2.png", '#', false);
   PlaceBanner("OfferBanner3", "./../assets/Banners/Electronics-Appliances-v2.png", '#', false);
+  PlaceProductGrid('HotSellers', false);
+  PlaceProductGrid('RecentCollection', false);
+  PlaceProductGrid('JustForYou', false);
 };
 
 // Backend communication
