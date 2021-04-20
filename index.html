@@ -18,7 +18,7 @@
         <div class="container d-xl-none d-block custom-nav">
             <a class="navbar-brand Logo" href="#">
                 <img src="./assets/orcus-logo.jpg" alt="">
-                <span class="ml-3 font-weight-bold">BRAND</apan>
+                <span class="ml-3 font-weight-bold">Delphi</apan>
             </a>
             <button id="Hamburger" class="navbar-toggler navbar-toggler-right border-0 ripple" type="button" data-bs-toggle="collapse" data-bs-target="#navbar4" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
@@ -29,7 +29,7 @@
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center Logo" href="#" onclick="PrepareHomePage()">
                     <img src="./assets/orcus-logo.jpg" alt="">
-                    <span class="ml-3 font-weight-bold">BRAND</apan>
+                    <span class="ml-3 font-weight-bold">Delphi</apan>
                 </a>
                 <input type="text" class="form-control" id="SearchField" aria-describedby="emailHelp" placeholder="Search">
                 <button type="button" class="btn btn-secondary" id="Search">
@@ -74,7 +74,7 @@
     <footer></footer>
     <script>
         // Prepare Home Page
-        PrepareHomePage();
+        Controller(Rounte.baseUrl + Rounte.PartialViews.HomePage, 'GET', null, true, 'body', null);
     </script>
 </body>
 </html>

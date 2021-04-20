@@ -1,10 +1,69 @@
+// Configuration section
+
 const Rounte = {
-  baseUrl: "http://127.0.0.1:8080/",
+  baseUrl: "http://127.0.0.1:5501/",
   BEUrl: "https://localhost:44376/",
   PartialViews: {
-    HomePageCarousel : "partialViews/homepageCarousel.html",
-    Banner : "partialViews/banner.html"
+    HomePage : "PartialViews/home.html",
   },
+  Components: {
+    FullWidthCarousel : "Components/FullWidthCarousel.html"
+  }
+};
+
+let GetDropdownFrame = (DrowdownLabel) => {
+  let frame = '';
+  frame = '<a class="nav-link dropdown-toggle" href="#" id="'+DrowdownLabel+'" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+  frame += '<span class="d-inline-block d-lg-none icon-width">';
+  frame += '<i class="far fa-caret-square-down"></i>';
+  frame += '</span>';
+  frame += DrowdownLabel;
+  frame += '<svg  id="arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+  frame += '<polyline points="6 9 12 15 18 9"></polyline>';
+  frame += '</svg>';
+  frame += '</a>';
+  return frame;
+};
+
+let enableHoverNavbar = () => {
+  if ($(window).width() > 991){
+    $('.navbar .d-menu').hover(
+      function () {
+        $(this).find('.sm-menu').first().stop(true, true).slideDown(150);
+      }, function () {
+        $(this).find('.sm-menu').first().stop(true, true).delay(120).slideUp(100);
+      });
+  }
+};
+
+$(document).ready(() => {
+  getCategories(1);
+});
+
+// Toolbox Secttion
+
+let Controller = (url, method, data, emptyHook = true, HookId, callback) => {
+  if(HookId != undefined && HookId[0] != '#'){ HookId = '#' + HookId; }
+  $.ajax({
+    url: url,
+    data: data,
+    method: method,
+    success: (res) => {
+      if(emptyHook == true){
+        $(HookId).empty();
+      }
+      
+      $(HookId).append(res);
+      if(callback != undefined){
+        if(typoeof(callback) === 'function'){
+          callback();
+        }
+      }
+    },
+    error: (res) => {
+      console.log(res);
+    }
+  })
 };
 
 let getCategories = (shopId) => {
@@ -32,72 +91,29 @@ let getCategories = (shopId) => {
   });
 };
 
-let GetDropdownFrame = (DrowdownLabel) => {
-  let frame = '';
-  frame = '<a class="nav-link dropdown-toggle" href="#" id="'+DrowdownLabel+'" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-  frame += '<span class="d-inline-block d-lg-none icon-width">';
-  frame += '<i class="far fa-caret-square-down"></i>';
-  frame += '</span>';
-  frame += DrowdownLabel;
-  frame += '<svg  id="arrow" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
-  frame += '<polyline points="6 9 12 15 18 9"></polyline>';
-  frame += '</svg>';
-  frame += '</a>';
-  return frame;
-}
-
-$(document).ready(() => {
-  getCategories(1);
-  enableHoverNavbar();
-});
-
-let enableHoverNavbar = () => {
-  if ($(window).width() > 991){
-    $('.navbar .d-menu').hover(
-      function () {
-        $(this).find('.sm-menu').first().stop(true, true).slideDown(150);
-      }, function () {
-        $(this).find('.sm-menu').first().stop(true, true).delay(120).slideUp(100);
-      });
-  }
-}
-
-let Controller = (url, method, data, emptyBody = true, callback) => {
-  $.ajax({
-    url: url,
-    data: data,
-    method: method,
-    success: (res) => {
-      if(emptyBody == true){
-        $('#body').empty();
-      }
-      $('#body').append(res);
-      if(typoeof(callback) === 'function'){ callback(); }
-    },
-    error: (res) => {
-      console.log(res);
-    }
-  })
-}
-
-let PlaceBanner = (bannerHookId, bannerImgUrl, clearHook = true) => {
+let PlaceBanner = (bannerHookId, bannerImgUrl,  bannerRedirectionUrl, clearHook = true) => {
   if(bannerHookId[0] != '#') { bannerHookId = '#' + bannerHookId; }
   if(clearHook) { $(bannerHookId).empty(); }
-  $(bannerHookId).append('<div class="container"> <a href="#" class="banner"> <img src="' + bannerImgUrl + '" alt="" srcset=""> </a> </div>');
-}
+  $(bannerHookId).append('<div class="container"> <a href="' + bannerRedirectionUrl + '" class="fullWidthBanner"> <img src="' + bannerImgUrl + '" alt="" srcset=""> </a> </div>');
+};
 
-let PrepareHomePage = () => {
+// UI Section
+
+let LoadHomePage = () => {
   $('#body').css('padding-top',$('header').height());
-  Controller(Rounte.baseUrl + Rounte.PartialViews.HomePageCarousel, 'GET', null, false, PlaceBanner("body", "./../assets/Banners/black-friday-1898114_1280.jpg", false));
-  // Controller(Rounte.baseUrl + Rounte.PartialViews.Banner, 'GET', null, false);
-  ;
-}
+  Controller(Rounte.baseUrl + Rounte.Components.FullWidthCarousel, 'GET', null, false, '#FullWidthCarousel1', null);
+  PlaceBanner("OfferBanner1", "./../assets/Banners/Computer-Accessories-v2.png", '#', false);
+  PlaceBanner("OfferBanner2", "./../assets/Banners/Lifstyle-v2.png", '#', false);
+  PlaceBanner("OfferBanner3", "./../assets/Banners/Electronics-Appliances-v2.png", '#', false);
+};
+
+// Backend communication
 
 let Search = () => {
   $('#Search').click(
     Controller(Rounte.BEUrl + 'Search', "GET", $('#SearchField').val())
   );
-} 
+};
 
 // Reskinning Guidance
 // Classes not to be removed

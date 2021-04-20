@@ -1,5 +1,5 @@
 :root {
-  --default-nav-bg: #686364;
+  --default-nav-bg: #932ead;
   --default-bg: white;
 
   --default-nav-text: white;
@@ -70,12 +70,7 @@
   height: 50vh;
 }
 
-.banner{
-  display: block;
-  margin-top: 10vh;
-}
-
-.banner img{
+.fullWidthBanner img{
   width: 100%;
 }
 
@@ -114,15 +109,21 @@
   width: 2rem;
 }
 
+#FullWidthCarousel1, #OfferBanner1, #OfferBanner2, #OfferBanner3{
+  margin: 5vh 0;
+}
 
 /* Breakpoint based Customization */
 /* X-Small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) { 
-  
 }
 
 /* Small devices (landscape phones, less than 768px) */
 @media (max-width: 767.98px) {
+  .carousel-item img{
+    height: 20vh !important;
+  }
+
   .Logo{
     width: 50%;
     margin: 0;
@@ -131,13 +132,14 @@
   .Logo, #Hamburger{
     display: inline;
   }
+  
   #navbar, #navbar4, #navbar-nav{
     height: auto;
   }
 }
 
 /* Medium devices (tablets, less than 992px) */
-@media (max-width: 991.98px) {
+@media (max-width: 991.98px) {  
 }
 
 /* Large devices (desktops, less than 1200px) */
@@ -147,5 +149,7 @@
 
 /* X-Large devices (large desktops, less than 1400px) */
 @media (max-width: 1399.98px) {
-  
+  .carousel-item img{
+    height: 40vh;
+  }
 }
