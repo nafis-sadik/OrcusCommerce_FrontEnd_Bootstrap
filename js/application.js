@@ -1,5 +1,9 @@
 // Configuration section
 
+const ApplocationConfiguration = {
+  shopId: 1
+}
+
 const Rounte = {
   baseUrl: "http://127.0.0.1:5501/",
   BEUrl: "https://localhost:44376/",
@@ -68,7 +72,7 @@ let Controller = (url, method, data, emptyHook = true, HookId, callback) => {
 
 let getCategories = (shopId) => {
   $.ajax({
-      url: Rounte.BEUrl + "api/Categories/" + shopId,
+      url: Rounte.BEUrl + "api/Shop/Categories/" + shopId,
       success: (res) => {
         res.forEach((categories) => {
           if (categories.subcategories.length > 0) {
@@ -97,8 +101,41 @@ let PlaceBanner = (bannerHookId, bannerImgUrl,  bannerRedirectionUrl, clearHook 
   $(bannerHookId).append('<div class="container"> <a href="' + bannerRedirectionUrl + '" class="fullWidthBanner"> <img src="' + bannerImgUrl + '" alt="" srcset=""> </a> </div>');
 };
 
-let PlaceProductGrid = (bannerHookId, clearHook = true) => {
-  Controller('./../Components/ProductGrid.html', 'GET', null, clearHook, bannerHookId, null);
+let GenerateProductGridComponent = (heading, cardSize,  discountStyle, productList) => {
+  let productGrid = '<div class="container product-grid"><div class="row"><h1 class="heading"><span>' + heading + '</span></h1>';
+  productList.forEach((product) => {
+    productGrid += '<div class="col-md-' + cardSize + '"><div class="card ' + discountStyle + '" style="margin: 0.5rem;">';
+    if(product.discountPercentage != null && product.discountPercentage != undefined  && product.discountPercentage != NaN){
+        productGrid  += '<h2>'+ product.discountPercentage +'%</h2>';
+    }
+    if(product.productUrl != null && product.productUrl != undefined  && product.productUrl != NaN){
+      productGrid += '<img src="' + product.productUrl + '" class="card-img-top" alt="' + product.productName + '">';
+    }else {
+      productGrid += '<img src="./../assets/dev/empty-placeholder-image-icon-design-260nw-1366372628.jpg" class="card-img-top" alt="' + product.productName + '">';
+    }
+    productGrid += '<div class="card-body">';
+    productGrid += '<a href="#"><h5 class="card-title">' + product.productName + '</h5></a> ';
+    if(product.discountPercentage != null && product.discountPercentage != undefined  && product.discountPercentage != NaN){
+      let discountAmount = (product.price * (product.discountPercentage / 100));
+      let originalPrice = product.price - discountAmount;
+      productGrid += '<p class="card-text price"><s>৳' + product.price + '</s> ৳' + originalPrice + ' </p>';
+    } else {
+      productGrid += '<p class="card-text price">৳' + product.price + '</p>';
+    }
+    productGrid += '</div></div></div>';
+  });
+
+  productGrid += '</div></div>';
+  return productGrid;
+};
+
+let PlaceProductGrid = (bannerHookId, heading, cardSize,  discountStyle, productSubCategory) => {
+  if(bannerHookId[0] != '#') { bannerHookId = '#' + bannerHookId; }
+  $.get('https://localhost:44376/api/Shop/ProductsBySubCategory/'+ ApplocationConfiguration.shopId +'/' + productSubCategory, function(productList) {
+    let content = GenerateProductGridComponent(heading, cardSize,  discountStyle, productList);
+    console.log(bannerHookId); 
+    $(bannerHookId).append(content);
+  });
 }
 
 // UI Section
@@ -109,9 +146,9 @@ let LoadHomePage = () => {
   PlaceBanner("OfferBanner1", "./../assets/Banners/Computer-Accessories-v2.png", '#', false);
   PlaceBanner("OfferBanner2", "./../assets/Banners/Lifstyle-v2.png", '#', false);
   PlaceBanner("OfferBanner3", "./../assets/Banners/Electronics-Appliances-v2.png", '#', false);
-  PlaceProductGrid('HotSellers', false);
-  PlaceProductGrid('RecentCollection', false);
-  PlaceProductGrid('JustForYou', false);
+  PlaceProductGrid('HotSellers', 'Trending Products', 3, 'discount-style-1', 3);
+  PlaceProductGrid('RecentCollection', 'New Collection', 2, 'discount-style-1', 3);
+  PlaceProductGrid('JustForYou', 'Recommended only for you', 2, 'discount-style-1', 3);
 };
 
 // Backend communication

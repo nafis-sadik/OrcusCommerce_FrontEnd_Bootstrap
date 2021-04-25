@@ -8,10 +8,15 @@
   --default-text: black;
   --default-price-text: red;
 
+  --default-transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
   --click-effect-color: white;
-  --hover-effect-color: rgba(0, 0, 0, 0.418);
+  --hover-effect-color: #932ead;
 }
 
+nav.custom-nav{
+  background-color: var(--default-bg);
+}
 .custom-nav {
   width: 100%;
   background-color: var(--default-nav-bg);
@@ -22,6 +27,10 @@
 
 #navbar, #navbar4, #navbar-nav{
   height: 5vh;
+}
+
+#navbar{
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
 #navbar-nav{
@@ -36,13 +45,15 @@
   padding-bottom: 0;
 }
 
-.custom-nav .nav-link,
-.navbar-brand {
+.custom-nav .nav-link {
   color: var(--default-nav-text);
 }
 
+.navbar-brand{color: var(--default-text);}
+
 .navbar-brand:hover {
-  color: var(--default-nav-text);
+  transition: var(--default-transition);
+  color: var(--default-nav-bg);
 }
 
 .navbar-brand {
@@ -64,7 +75,7 @@
   display: inline-block;
 }
 
-.d-menu{
+.d-menu a{
   height: 100%;
 }
 
@@ -78,15 +89,112 @@
 }
 
 /* Special Effects */
+
+/* Product Grid Styles */
+.card{
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: var(--default-transition);
+}
+
+.card:hover{
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  cursor: pointer;
+}
+
+.card-title{
+  font-size: 15px;
+}
+
+.product-grid a{
+  transition: var(--default-transition);
+  text-decoration: none;
+  color: var(--default-text);
+}
+
+.product-grid a:hover{
+  color: var(--default-nav-bg);
+}
+
+.price{
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--default-price-text);
+}
+
+h1.heading {
+  color: #BFA170;
+  text-transform: uppercase;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+}
+
+h1.heading span {
+  background-color: var(--default-bg);
+  display: inline-block;
+  z-index: 1;
+  padding-right: 10px;
+}
+
+h1.heading:before {
+  content: "";
+  background-color: var(--default-heading-style-color);
+  display: block;
+  position: relative;
+  top: 23px;
+  width: 100%;
+  height: 6px;
+  z-index: -1;
+}
+
+
+
+div.discount-style-1:before, div.discount-style-1:after {
+  bottom: 26px;
+  box-shadow: 0 28px 8px rgba(0,0,0,0.5);
+  content: "";
+  height: 28px;
+  position: absolute;
+  width: 48%;
+  z-index: -1;
+}
+div.discount-style-1:before {
+  left: 2%;
+  transform: rotate(-3deg);
+}
+div.discount-style-1:after {
+  right: 2%;
+  transform: rotate(3deg);
+}
+div.discount-style-1 h2 {
+  background-color: var(--discount-style-bg-color);
+  border-width: 1px 1px 2px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  margin: 0;
+  padding: 4px 40px;
+  position: absolute;
+  right: -14px;
+  top: 12px;
+}
+div.discount-style-1 h2:after {
+  border-width: 7px;
+  border-style: solid;
+  border-color: #134 transparent transparent #134;
+  bottom: -15px;
+  content: "";
+  position: absolute;
+  right: -1px;
+}
+/* Product Grid Styles */
 /* Ripple effect */
 .ripple {
   background-position: center;
   transition: background 0.8s;
   border: 1px solid transparent;
+  border-radius: 5%;
 }
-.ripple:hover {
-  background: var(--hover-effect-color) radial-gradient(circle, transparent 1%, var(--hover-effect-color) 1%) center/15000%;
-  border: 1px solid #dee2e6;
+.ripple:hover {color: var(--default-bg);
+  background-color: var(--default-nav-bg);
 }
 .ripple:active {
   background-color: var(--click-effect-color);
@@ -114,6 +222,10 @@
 
 #FullWidthCarousel1, #OfferBanner1, #OfferBanner2, #OfferBanner3{
   margin: 5vh 0;
+}
+
+#Search{
+  margin-right: 15%;
 }
 
 /* Breakpoint based Customization */
@@ -155,4 +267,9 @@
   .carousel-item img{
     height: 40vh;
   }
+}
+
+/* Bootstrap Customization */
+.btn-secondary{
+  background-color: var(--default-nav-bg);
 }
