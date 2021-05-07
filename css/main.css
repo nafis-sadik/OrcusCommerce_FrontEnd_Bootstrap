@@ -10,7 +10,7 @@
 
   --default-transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 
-  --click-effect-color: white;
+  --click-effect-color: #541863;
   --hover-effect-color: #932ead;
 }
 
@@ -193,7 +193,8 @@ div.discount-style-1 h2:after {
   border: 1px solid transparent;
   border-radius: 5%;
 }
-.ripple:hover {color: var(--default-bg);
+.ripple:hover {
+  color: var(--default-bg);
   background-color: var(--default-nav-bg);
 }
 .ripple:active {

@@ -6,12 +6,16 @@ const ApplocationConfiguration = {
 
 const Rounte = {
   baseUrl: "http://127.0.0.1:5501/",
-  BEUrl: "https://localhost:44376/",
+  BEUrl: "https://localhost:44376/api/",
   PartialViews: {
     HomePage : "PartialViews/home.html",
+    ProductGridPage: "PartialViews/productGridPage.html"
   },
   Components: {
     FullWidthCarousel : "Components/FullWidthCarousel.html"
+  },
+  API: {
+    ProductBySubCategory: "Shop/ProductsBySubCategory/"
   }
 };
 
@@ -42,6 +46,7 @@ let enableHoverNavbar = () => {
 
 $(document).ready(() => {
   getCategories(1);
+  LoadHomePage();
 });
 
 // Toolbox Secttion
@@ -72,13 +77,13 @@ let Controller = (url, method, data, emptyHook = true, HookId, callback) => {
 
 let getCategories = (shopId) => {
   $.ajax({
-      url: Rounte.BEUrl + "api/Shop/Categories/" + shopId,
+      url: Rounte.BEUrl + "Shop/Categories/" + shopId,
       success: (res) => {
         res.forEach((categories) => {
           if (categories.subcategories.length > 0) {
             let dropdown = '<div class="dropdown-menu shadow-sm sm-menu" aria-labelledby="' + categories.categoryName + '">';
             categories.subcategories.forEach((subcategories) => {
-              dropdown += '<a class="dropdown-item" href="#">' + subcategories.subCategoryName + "</a>";
+              dropdown += '<a class="dropdown-item" href="#" onClick="LoadProductGridPage(' + subcategories.subCategoryId + ' ,&apos;' + subcategories.subCategoryName + '&apos;)">' + subcategories.subCategoryName + "</a>";
             });
             dropdown += '</div>';
 
@@ -104,24 +109,34 @@ let PlaceBanner = (bannerHookId, bannerImgUrl,  bannerRedirectionUrl, clearHook 
 let GenerateProductGridComponent = (heading, cardSize,  discountStyle, productList) => {
   let productGrid = '<div class="container product-grid"><div class="row"><h1 class="heading"><span>' + heading + '</span></h1>';
   productList.forEach((product) => {
-    productGrid += '<div class="col-md-' + cardSize + '"><div class="card ' + discountStyle + '" style="margin: 0.5rem;">';
-    if(product.discountPercentage != null && product.discountPercentage != undefined  && product.discountPercentage != NaN){
+    if(product.hasDiscount){
+      productGrid += '<div class="col-md-' + cardSize + '"><div class="card ' + discountStyle + '" style="margin: 0.5rem;">';
+    }
+    else{
+      productGrid += '<div class="col-md-' + cardSize + '"><div class="card" style="margin: 0.5rem;">';
+    }
+
+    if(product.discountPercentage != null && product.discountPercentage != undefined  && product.discountPercentage != NaN && product.discountPercentage > 0){
         productGrid  += '<h2>'+ product.discountPercentage +'%</h2>';
     }
+    
     if(product.productUrl != null && product.productUrl != undefined  && product.productUrl != NaN){
       productGrid += '<img src="' + product.productUrl + '" class="card-img-top" alt="' + product.productName + '">';
     }else {
       productGrid += '<img src="./../assets/dev/empty-placeholder-image-icon-design-260nw-1366372628.jpg" class="card-img-top" alt="' + product.productName + '">';
     }
+
     productGrid += '<div class="card-body">';
     productGrid += '<a href="#"><h5 class="card-title">' + product.productName + '</h5></a> ';
-    if(product.discountPercentage != null && product.discountPercentage != undefined  && product.discountPercentage != NaN){
+
+    if(product.discountPercentage != null && product.discountPercentage != undefined  && product.discountPercentage != NaN && product.discountPercentage > 0){
       let discountAmount = (product.price * (product.discountPercentage / 100));
       let originalPrice = product.price - discountAmount;
-      productGrid += '<p class="card-text price"><s>৳' + product.price + '</s> ৳' + originalPrice + ' </p>';
+      productGrid += '<p class="card-text price"><s>৳' + product.price.toFixed(2) + '</s> ৳' + originalPrice + ' </p>';
     } else {
       productGrid += '<p class="card-text price">৳' + product.price + '</p>';
     }
+
     productGrid += '</div></div></div>';
   });
 
@@ -131,16 +146,16 @@ let GenerateProductGridComponent = (heading, cardSize,  discountStyle, productLi
 
 let PlaceProductGrid = (bannerHookId, heading, cardSize,  discountStyle, productSubCategory) => {
   if(bannerHookId[0] != '#') { bannerHookId = '#' + bannerHookId; }
-  $.get('https://localhost:44376/api/Shop/ProductsBySubCategory/'+ ApplocationConfiguration.shopId +'/' + productSubCategory, function(productList) {
+  $.get(Rounte.BEUrl + Rounte.API.ProductBySubCategory + ApplocationConfiguration.shopId +'/' + productSubCategory, function(productList) {
     let content = GenerateProductGridComponent(heading, cardSize,  discountStyle, productList);
-    console.log(bannerHookId); 
+    $(bannerHookId).empty();
     $(bannerHookId).append(content);
   });
 }
 
 // UI Section
 
-let LoadHomePage = () => {
+let RenderHomePage = () => {
   $('#body').css('padding-top',$('header').height());
   Controller(Rounte.baseUrl + Rounte.Components.FullWidthCarousel, 'GET', null, false, '#FullWidthCarousel1', null);
   PlaceBanner("OfferBanner1", "./../assets/Banners/Computer-Accessories-v2.png", '#', false);
@@ -150,6 +165,17 @@ let LoadHomePage = () => {
   PlaceProductGrid('RecentCollection', 'New Collection', 2, 'discount-style-1', 3);
   PlaceProductGrid('JustForYou', 'Recommended only for you', 2, 'discount-style-1', 3);
 };
+
+let LoadHomePage = () => {
+    Controller(Rounte.baseUrl + Rounte.PartialViews.HomePage, 'GET', null, true, 'body', null);
+    $('#body').css('margin-top', '0');
+}
+
+let LoadProductGridPage = (subcategories, heading) => {
+  Controller(Rounte.baseUrl + Rounte.PartialViews.ProductGridPage, 'GET', null, true, 'body', null);
+  PlaceProductGrid('ProductContainer', heading, 3, 'discount-style-1', subcategories);
+  $('#body').css('margin-top', '50px');
+}
 
 // Backend communication
 
